@@ -1,0 +1,9 @@
+name: PlayerBridge
+description: $description
+version: '${version}'
+
+main: io.github.akumetan.playerbridge.PlayerBridge
+api-version: '26.2'
+load: POSTWORLD
+
+authors: [akumetan]
