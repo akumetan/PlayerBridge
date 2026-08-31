@@ -6,4 +6,8 @@ main: io.github.akumetan.playerbridge.PlayerBridge
 api-version: '26.2'
 load: POSTWORLD
 
+libraries:
+  - org.mariadb.jdbc:mariadb-java-client:3.5.10
+  - com.zaxxer:HikariCP:7.1.0
+
 authors: [akumetan]
