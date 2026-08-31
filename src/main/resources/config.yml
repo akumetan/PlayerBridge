@@ -12,3 +12,8 @@ database:
   max-pool-size: 10
   min-pool-size: 2
   connection-timeout-ms: 5000
+
+# Fully configurable messages supporting minecraft color constants and hex colors.
+# https://docs.papermc.io/adventure/minimessage/format/
+messages:
+  no-permission: "<red>You do not have permission to use this command.</red>"

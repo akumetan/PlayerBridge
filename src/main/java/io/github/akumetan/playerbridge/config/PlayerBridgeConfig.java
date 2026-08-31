@@ -1,4 +1,7 @@
 package io.github.akumetan.playerbridge.config;
 
-public record PlayerBridgeConfig(DatabaseConfig database) {
+public record PlayerBridgeConfig(
+        DatabaseConfig database,
+        MessagesConfig messages
+) {
 }

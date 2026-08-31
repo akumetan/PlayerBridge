@@ -29,7 +29,11 @@ public class ConfigManager {
                 file.getInt("database.connection-timeout-ms", 5000)
         );
 
-        this.config = new PlayerBridgeConfig(database);
+        var messages = new MessagesConfig(
+                file.getString("messages.no-permission", "<red>You do not have permission to use this command.</red>")
+        );
+
+        this.config = new PlayerBridgeConfig(database, messages);
     }
 
     public PlayerBridgeConfig getConfig() {

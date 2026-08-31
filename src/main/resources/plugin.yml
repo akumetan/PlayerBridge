@@ -10,4 +10,11 @@ libraries:
   - org.mariadb.jdbc:mariadb-java-client:3.5.10
   - com.zaxxer:HikariCP:7.1.0
 
-authors: [akumetan]
+authors: [ akumetan ]
+
+commands:
+  playerbridge:
+    aliases: [ pb ]
+    usage: /<command>
+    permission: playerbridge.command.use
+
