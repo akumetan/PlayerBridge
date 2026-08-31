@@ -18,3 +18,4 @@ database:
 messages:
   no-permission: "<red>You do not have permission to use this command.</red>"
   reload-config: "<green>Configuration successfully reloaded.</green>"
+  check-version: "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>"
