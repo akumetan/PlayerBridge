@@ -1,0 +1,14 @@
+# This is the default config file for PlayerBridge.
+# This config was generated for version ${version}.
+
+# Configure database constants.
+database:
+  host: "127.0.0.1"
+  port: 3306
+  database: "player_bridge"
+  username: "root"
+  password: ""
+  # HikariCP configuration constants. If you do not know what this does, just ignore it.
+  max-pool-size: 10
+  min-pool-size: 2
+  connection-timeout-ms: 5000
