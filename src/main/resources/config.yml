@@ -8,7 +8,7 @@ database:
   database: "player_bridge"
   username: "root"
   password: ""
-  # HikariCP configuration constants. If you do not know what this does, just ignore it.
+  # HikariCP configuration constants. If you do not know what these do, just ignore them.
   max-pool-size: 10
   min-pool-size: 2
   connection-timeout-ms: 5000
