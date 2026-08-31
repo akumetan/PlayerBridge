@@ -15,6 +15,6 @@ authors: [ akumetan ]
 commands:
   playerbridge:
     aliases: [ pb ]
-    usage: /<command>
+    usage: /<command <reload>
     permission: playerbridge.command.use
 
