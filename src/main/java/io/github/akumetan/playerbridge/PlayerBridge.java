@@ -3,6 +3,7 @@ package io.github.akumetan.playerbridge;
 import io.github.akumetan.playerbridge.command.CommandManager;
 import io.github.akumetan.playerbridge.command.PlayerBridgeCommand;
 import io.github.akumetan.playerbridge.command.PlayerBridgeTabCompleter;
+import io.github.akumetan.playerbridge.command.sub.ReloadCommand;
 import io.github.akumetan.playerbridge.config.ConfigManager;
 import io.github.akumetan.playerbridge.database.DatabaseManager;
 import net.kyori.adventure.text.Component;
@@ -36,6 +37,7 @@ public final class PlayerBridge extends JavaPlugin {
 
         // Register commands
         this.cmdManager = new CommandManager();
+        this.cmdManager.register(new ReloadCommand(cfgManager));
         this.getCommand("playerbridge").setExecutor(new PlayerBridgeCommand(cmdManager, cfgManager.getConfig().messages()));
         this.getCommand("playerbridge").setTabCompleter(new PlayerBridgeTabCompleter(cmdManager));
     }
