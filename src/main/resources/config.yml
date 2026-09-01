@@ -13,6 +13,10 @@ database:
   min-pool-size: 2
   connection-timeout-ms: 5000
 
+# Ownership mechanism to prevent race-conditions. Defaults should be fine in most cases.
+ownership:
+  lease-duration-seconds: 60
+
 # Fully configurable messages supporting minecraft color constants and hex colors.
 # https://docs.papermc.io/adventure/minimessage/format/
 messages:

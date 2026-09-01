@@ -3,6 +3,8 @@ package io.github.akumetan.playerbridge.config;
 import io.github.akumetan.playerbridge.PlayerBridge;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.time.Duration;
+
 public class ConfigManager {
 
     private final PlayerBridge plugin;
@@ -35,7 +37,11 @@ public class ConfigManager {
                 yml.getString("messages.check-version", "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>")
         );
 
-        this.config = new PlayerBridgeConfig(database, messages);
+        var ownership = new OwnershipConfig(
+                Duration.ofSeconds(yml.getLong("ownership.lease-duration-seconds", 60L))
+        );
+
+        this.config = new PlayerBridgeConfig(database, messages, ownership);
     }
 
     public PlayerBridgeConfig getConfig() {
