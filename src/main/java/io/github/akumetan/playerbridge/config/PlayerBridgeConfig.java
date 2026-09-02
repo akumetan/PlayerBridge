@@ -3,6 +3,7 @@ package io.github.akumetan.playerbridge.config;
 public record PlayerBridgeConfig(
         DatabaseConfig database,
         MessagesConfig messages,
-        OwnershipConfig ownership
+        OwnershipConfig ownership,
+        PlayerDataConfig data
 ) {
 }

@@ -17,6 +17,12 @@ database:
 ownership:
   lease-duration-seconds: 60
 
+# Handles player-data saving and loading. Defaults should be fine as well.
+player-data:
+  login-timeout-seconds: 5
+  retry-interval-ms: 250
+  final-save-timeout-seconds: 15
+
 # Fully configurable messages supporting minecraft color constants and hex colors.
 # https://docs.papermc.io/adventure/minimessage/format/
 messages:

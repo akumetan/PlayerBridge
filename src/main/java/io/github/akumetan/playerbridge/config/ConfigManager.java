@@ -41,7 +41,13 @@ public class ConfigManager {
                 Duration.ofSeconds(yml.getLong("ownership.lease-duration-seconds", 60L))
         );
 
-        this.config = new PlayerBridgeConfig(database, messages, ownership);
+        var data = new PlayerDataConfig(
+                Duration.ofSeconds(yml.getLong("player-data.login-timeout-seconds", 5L)),
+                Duration.ofMillis(yml.getLong("player-data.retry-interval-ms", 250L)),
+                Duration.ofSeconds(yml.getLong("player-data.final-save-timeout-seconds", 15L))
+        );
+
+        this.config = new PlayerBridgeConfig(database, messages, ownership, data);
     }
 
     public PlayerBridgeConfig getConfig() {
