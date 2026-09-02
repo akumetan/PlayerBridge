@@ -1,6 +1,6 @@
 package io.github.akumetan.playerbridge.profile.ownership;
 
-import io.github.akumetan.playerbridge.config.OwnershipConfig;
+import io.github.akumetan.playerbridge.config.PlayerBridgeConfig;
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -13,16 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public final class PlayerOwnershipService {
 
     private final PlayerOwnershipRepository repository;
-    private final OwnershipConfig config;
-    private final String serverId;
+    private final PlayerBridgeConfig config;
 
     private final ConcurrentHashMap<UUID, PlayerOwnership> ownerships = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, ReentrantLock> localLocks = new ConcurrentHashMap<>();
 
-    public PlayerOwnershipService(PlayerOwnershipRepository repository, OwnershipConfig config, String serverId) {
+    public PlayerOwnershipService(PlayerOwnershipRepository repository, PlayerBridgeConfig config) {
         this.repository = repository;
         this.config = config;
-        this.serverId = serverId;
     }
 
     public OwnershipResult acquire(UUID uuid) {
@@ -35,17 +33,17 @@ public final class PlayerOwnershipService {
                 return new OwnershipResult.Acquired(existing);
 
             String token = UUID.randomUUID().toString();
-            Instant expiresAt = Instant.now().plus(this.config.leaseDuration());
+            Instant expiresAt = Instant.now().plus(this.config.ownership().leaseDuration());
 
             try {
-                if (!this.repository.tryAcquire(uuid, this.serverId, token, expiresAt)) {
+                if (!this.repository.tryAcquire(uuid, this.config.serverId(), token, expiresAt)) {
                     PlayerOwnership current = this.repository.find(uuid);
                     if (current == null)
                         return new OwnershipResult.Failed();
 
                     return new OwnershipResult.Unavailable(current.serverId());
                 }
-                PlayerOwnership ownership = new PlayerOwnership(uuid, this.serverId, token, expiresAt);
+                PlayerOwnership ownership = new PlayerOwnership(uuid, this.config.serverId(), token, expiresAt);
                 this.ownerships.put(uuid, ownership);
 
                 return new OwnershipResult.Acquired(ownership);
@@ -68,13 +66,13 @@ public final class PlayerOwnershipService {
             if (ownership == null)
                 return false;
 
-            Instant newExpiresAt = Instant.now().plus(config.leaseDuration());
+            Instant newExpiresAt = Instant.now().plus(config.ownership().leaseDuration());
             try {
-                if (!this.repository.renew(uuid, serverId, ownership.token(), newExpiresAt)) {
+                if (!this.repository.renew(uuid, this.config.serverId(), ownership.token(), newExpiresAt)) {
                     this.ownerships.remove(uuid, ownership);
                     return false;
                 }
-                this.ownerships.replace(uuid, ownership, new PlayerOwnership(uuid, serverId, ownership.token(), newExpiresAt));
+                this.ownerships.replace(uuid, ownership, new PlayerOwnership(uuid, this.config.serverId(), ownership.token(), newExpiresAt));
                 return true;
 
             } catch (SQLException exception) {
@@ -113,7 +111,7 @@ public final class PlayerOwnershipService {
                 return false;
 
             try {
-                boolean released = this.repository.release(uuid, serverId, ownership.token());
+                boolean released = this.repository.release(uuid, this.config.serverId(), ownership.token());
                 if (released)
                     this.ownerships.remove(uuid, ownership);
 

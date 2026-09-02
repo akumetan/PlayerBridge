@@ -1,6 +1,6 @@
 package io.github.akumetan.playerbridge.profile.data;
 
-import io.github.akumetan.playerbridge.config.PlayerDataConfig;
+import io.github.akumetan.playerbridge.config.PlayerBridgeConfig;
 import io.github.akumetan.playerbridge.profile.ownership.OwnershipResult;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnership;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
@@ -13,14 +13,12 @@ public final class PlayerDataService {
 
     private final PlayerDataRepository repository;
     private final PlayerOwnershipService ownershipService;
-    private final PlayerDataConfig config;
-    private final String serverId;
+    private final PlayerBridgeConfig config;
 
-    public PlayerDataService(PlayerDataRepository repository, PlayerOwnershipService service, PlayerDataConfig config, String serverId) {
+    public PlayerDataService(PlayerDataRepository repository, PlayerOwnershipService service, PlayerBridgeConfig config) {
         this.repository = repository;
         this.ownershipService = service;
         this.config = config;
-        this.serverId = serverId;
     }
 
     public LoadResult load(UUID uuid, Duration timeout) {
@@ -50,7 +48,7 @@ public final class PlayerDataService {
                 return LoadResult.busy();
 
 
-            long retryMillis = Math.max(1L, config.retryInterval().toMillis());
+            long retryMillis = Math.max(1L, config.data().retryInterval().toMillis());
             long remainingMillis = Math.max(1L, remaining / 1_000_000L);
             long sleepMillis = Math.min(retryMillis, remainingMillis);
 
@@ -69,7 +67,7 @@ public final class PlayerDataService {
             return false;
 
         try {
-            boolean saved = repository.save(data, serverId, ownership.token());
+            boolean saved = repository.save(data, config.serverId(), ownership.token());
             if (!saved)
                 ownershipService.releaseLocalOnly(data.uuid());
 
@@ -84,10 +82,10 @@ public final class PlayerDataService {
         if (ownership == null)
             return false;
 
-        long deadline = System.nanoTime() + config.finalSaveTimeout().toNanos();
+        long deadline = System.nanoTime() + config.data().finalSaveTimeout().toNanos();
         while (true) {
             try {
-                boolean saved = repository.saveAndRelease(data, serverId, ownership.token());
+                boolean saved = repository.saveAndRelease(data, config.serverId(), ownership.token());
                 ownershipService.releaseLocalOnly(uuid);
                 return saved;
 
@@ -99,7 +97,7 @@ public final class PlayerDataService {
                     return false;
                 }
 
-                long retryMillis = Math.max(1L, config.retryInterval().toMillis());
+                long retryMillis = Math.max(1L, config.data().retryInterval().toMillis());
                 long remainingMillis = Math.max(1L, remaining / 1_000_000L);
                 long sleepMillis = Math.min(retryMillis, remainingMillis);
 

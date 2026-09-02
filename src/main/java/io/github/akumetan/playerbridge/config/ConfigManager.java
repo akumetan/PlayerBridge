@@ -4,6 +4,7 @@ import io.github.akumetan.playerbridge.PlayerBridge;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public class ConfigManager {
 
@@ -19,6 +20,12 @@ public class ConfigManager {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         FileConfiguration yml = plugin.getConfig();
+
+        var serverId = yml.getString("server-id");
+        if (serverId == null || serverId.isBlank()) {
+            yml.set("server-id", UUID.randomUUID().toString());
+            plugin.saveDefaultConfig();
+        }
 
         var database = new DatabaseConfig(
                 yml.getString("database.host", "127.0.0.1"),
@@ -59,7 +66,7 @@ public class ConfigManager {
                 Duration.ofSeconds(yml.getLong("player-data.final-save-timeout-seconds", 15L))
         );
 
-        this.config = new PlayerBridgeConfig(database, messages, modules, ownership, data);
+        this.config = new PlayerBridgeConfig(serverId, database, messages, modules, ownership, data);
     }
 
     public PlayerBridgeConfig getConfig() {

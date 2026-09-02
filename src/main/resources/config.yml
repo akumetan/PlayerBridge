@@ -1,6 +1,9 @@
 # This is the default config file for PlayerBridge.
 # This config was generated for version ${version}.
 
+# Unique identifier for this server.
+server-id: ""
+
 # Configure database constants.
 database:
   host: "127.0.0.1"
