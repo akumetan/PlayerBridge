@@ -13,6 +13,17 @@ database:
   min-pool-size: 2
   connection-timeout-ms: 5000
 
+# Enable/disable individual modules to sync.
+# IMPORTANT: Disabled modules still save to the database but won't apply in-game. Keep module states identical across all servers to prevent data corruption.
+modules:
+  inventory: true
+  ender-chest: true
+  health-and-food: true
+  experience: true
+  fire-ticks: true
+  game-mode: true
+  active-effects: true
+
 # Ownership mechanism to prevent race-conditions. Defaults should be fine in most cases.
 ownership:
   lease-duration-seconds: 60
@@ -29,3 +40,5 @@ messages:
   no-permission: "<red>You do not have permission to use this command.</red>"
   reload-config: "<green>Configuration successfully reloaded.</green>"
   check-version: "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>"
+  kick-loading-busy: "<red>Your data is currently saving on another server. Please try reconnecting.</red>"
+  kick-loading-error: "<red>Failed to load your data. Please try again later.</red>"

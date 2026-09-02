@@ -34,7 +34,19 @@ public class ConfigManager {
         var messages = new MessagesConfig(
                 yml.getString("messages.no-permission", "<red>You do not have permission to use this command.</red>"),
                 yml.getString("messages.reload-config", "<green>Configuration successfully reloaded.</green>"),
-                yml.getString("messages.check-version", "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>")
+                yml.getString("messages.check-version", "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>"),
+                yml.getString("messages.kick-loading-busy", "<red>Your data is currently saving on another server. Please try reconnecting.</red>"),
+                yml.getString("messages.kick-loading-error", "<red>Failed to load your data. Please try again later.</red>")
+        );
+
+        var modules = new ModulesConfig(
+                yml.getBoolean("modules.inventory", true),
+                yml.getBoolean("modules.ender-chest", true),
+                yml.getBoolean("modules.health-and-food", true),
+                yml.getBoolean("modules.experience", true),
+                yml.getBoolean("modules.fire-ticks", true),
+                yml.getBoolean("modules.game-mode", true),
+                yml.getBoolean("modules.active-effects", true)
         );
 
         var ownership = new OwnershipConfig(
@@ -47,7 +59,7 @@ public class ConfigManager {
                 Duration.ofSeconds(yml.getLong("player-data.final-save-timeout-seconds", 15L))
         );
 
-        this.config = new PlayerBridgeConfig(database, messages, ownership, data);
+        this.config = new PlayerBridgeConfig(database, messages, modules, ownership, data);
     }
 
     public PlayerBridgeConfig getConfig() {
