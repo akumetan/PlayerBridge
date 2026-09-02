@@ -13,6 +13,7 @@ import io.github.akumetan.playerbridge.profile.data.PlayerDataRepository;
 import io.github.akumetan.playerbridge.profile.data.PlayerDataService;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipRepository;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
+import io.github.akumetan.playerbridge.task.OwnershipRenewalTask;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,6 +66,11 @@ public final class PlayerBridge extends JavaPlugin {
         this.cmdManager.register(new VersionCommand(this, cfgManager.getConfig().messages()));
         this.getCommand("playerbridge").setExecutor(new PlayerBridgeCommand(cmdManager, cfgManager.getConfig().messages()));
         this.getCommand("playerbridge").setTabCompleter(new PlayerBridgeTabCompleter(cmdManager));
+
+        // Start ownership-renewal task
+        long renewalTicks = cfgManager.getConfig().ownership().renewalInterval().toMillis() / 50L;
+        OwnershipRenewalTask renewalTask = new OwnershipRenewalTask(ownershipService);
+        this.getServer().getScheduler().runTaskTimerAsynchronously(this, renewalTask, renewalTicks, renewalTicks);
     }
 
     @Override

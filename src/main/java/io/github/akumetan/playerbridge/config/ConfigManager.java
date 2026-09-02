@@ -58,7 +58,8 @@ public class ConfigManager {
         );
 
         var ownership = new OwnershipConfig(
-                Duration.ofSeconds(yml.getLong("ownership.lease-duration-seconds", 60L))
+                Duration.ofSeconds(yml.getLong("ownership.lease-duration-seconds", 60L)),
+                Duration.ofSeconds(yml.getLong("ownership.renewal-interval-seconds", 20L))
         );
 
         var data = new PlayerDataConfig(

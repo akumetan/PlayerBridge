@@ -30,6 +30,7 @@ modules:
 # Ownership mechanism to prevent race-conditions. Defaults should be fine in most cases.
 ownership:
   lease-duration-seconds: 60
+  renewal-interval-seconds: 20
 
 # Handles player-data saving and loading. Defaults should be fine as well.
 player-data:
