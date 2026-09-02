@@ -35,7 +35,7 @@ public final class PlayerOwnershipService {
                 return new OwnershipResult.Acquired(existing);
 
             String token = UUID.randomUUID().toString();
-            Instant expiresAt = Instant.now().plus(this.config.leaseDurationSeconds());
+            Instant expiresAt = Instant.now().plus(this.config.leaseDuration());
 
             try {
                 if (!this.repository.tryAcquire(uuid, this.serverId, token, expiresAt)) {
@@ -68,7 +68,7 @@ public final class PlayerOwnershipService {
             if (ownership == null)
                 return false;
 
-            Instant newExpiresAt = Instant.now().plus(config.leaseDurationSeconds());
+            Instant newExpiresAt = Instant.now().plus(config.leaseDuration());
             try {
                 if (!this.repository.renew(uuid, serverId, ownership.token(), newExpiresAt)) {
                     this.ownerships.remove(uuid, ownership);
