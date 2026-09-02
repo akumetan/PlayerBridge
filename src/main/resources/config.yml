@@ -37,6 +37,7 @@ player-data:
   login-timeout-seconds: 5
   retry-interval-ms: 250
   final-save-timeout-seconds: 15
+  auto-save-interval-seconds: 300
 
 # Fully configurable messages supporting minecraft color constants and hex colors.
 # https://docs.papermc.io/adventure/minimessage/format/

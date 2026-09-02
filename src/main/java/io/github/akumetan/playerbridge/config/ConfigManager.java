@@ -65,7 +65,8 @@ public class ConfigManager {
         var data = new PlayerDataConfig(
                 Duration.ofSeconds(yml.getLong("player-data.login-timeout-seconds", 5L)),
                 Duration.ofMillis(yml.getLong("player-data.retry-interval-ms", 250L)),
-                Duration.ofSeconds(yml.getLong("player-data.final-save-timeout-seconds", 15L))
+                Duration.ofSeconds(yml.getLong("player-data.final-save-timeout-seconds", 15L)),
+                Duration.ofSeconds(yml.getLong("player-data.auto-save-interval-seconds", 300L))
         );
 
         this.config = new PlayerBridgeConfig(serverId, database, messages, modules, ownership, data);

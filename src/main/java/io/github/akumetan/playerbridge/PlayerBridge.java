@@ -15,6 +15,7 @@ import io.github.akumetan.playerbridge.profile.data.PlayerDataService;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipRepository;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
 import io.github.akumetan.playerbridge.task.OwnershipRenewalTask;
+import io.github.akumetan.playerbridge.task.PlayerAutoSaveTask;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -35,6 +36,7 @@ public final class PlayerBridge extends JavaPlugin {
     private PlayerDataService dataService;
     private PlayerDataCache dataCache;
     private OwnershipRenewalTask renewalTask;
+    private PlayerAutoSaveTask autoSaveTask;
 
 
     @Override
@@ -70,6 +72,10 @@ public final class PlayerBridge extends JavaPlugin {
         long renewalTicks = cfgManager.getConfig().ownership().renewalInterval().toMillis() / 50L;
         this.renewalTask = new OwnershipRenewalTask(ownershipService);
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, renewalTask, renewalTicks, renewalTicks);
+
+        long autoSaveTicks = cfgManager.getConfig().data().autoSaveInterval().toMillis() / 50L;
+        this.autoSaveTask = new PlayerAutoSaveTask(this, dataService);
+        this.getServer().getScheduler().runTaskTimer(this, autoSaveTask, autoSaveTicks, autoSaveTicks);
     }
 
     @Override

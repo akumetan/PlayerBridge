@@ -5,6 +5,7 @@ import java.time.Duration;
 public record PlayerDataConfig(
         Duration loginTimeout,
         Duration retryInterval,
-        Duration finalSaveTimeout
+        Duration finalSaveTimeout,
+        Duration autoSaveInterval
 ) {
 }
