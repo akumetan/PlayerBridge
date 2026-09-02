@@ -78,7 +78,7 @@ public final class PlayerConnectionListener implements Listener {
         }
 
         if (this.config.modules().experience())
-            player.setTotalExperience(data.experience());
+            player.setExperienceLevelAndProgress(data.experience());
 
         if (this.config.modules().fireTicks()) {
             player.setFireTicks(data.fireTicks());
