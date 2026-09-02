@@ -23,7 +23,8 @@ public class ConfigManager {
 
         var serverId = yml.getString("server-id");
         if (serverId == null || serverId.isBlank()) {
-            yml.set("server-id", UUID.randomUUID().toString());
+            serverId = UUID.randomUUID().toString();
+            yml.set("server-id", serverId);
             plugin.saveDefaultConfig();
         }
 
