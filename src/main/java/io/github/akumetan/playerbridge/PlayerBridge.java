@@ -8,6 +8,7 @@ import io.github.akumetan.playerbridge.command.sub.VersionCommand;
 import io.github.akumetan.playerbridge.config.ConfigManager;
 import io.github.akumetan.playerbridge.database.DatabaseManager;
 import io.github.akumetan.playerbridge.listener.PlayerConnectionListener;
+import io.github.akumetan.playerbridge.profile.data.PlayerData;
 import io.github.akumetan.playerbridge.profile.data.PlayerDataCache;
 import io.github.akumetan.playerbridge.profile.data.PlayerDataRepository;
 import io.github.akumetan.playerbridge.profile.data.PlayerDataService;
@@ -16,9 +17,12 @@ import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
 import io.github.akumetan.playerbridge.task.OwnershipRenewalTask;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public final class PlayerBridge extends JavaPlugin {
 
@@ -30,6 +34,7 @@ public final class PlayerBridge extends JavaPlugin {
     private PlayerDataRepository dataRepository;
     private PlayerDataService dataService;
     private PlayerDataCache dataCache;
+    private OwnershipRenewalTask renewalTask;
 
 
     @Override
@@ -69,12 +74,19 @@ public final class PlayerBridge extends JavaPlugin {
 
         // Start ownership-renewal task
         long renewalTicks = cfgManager.getConfig().ownership().renewalInterval().toMillis() / 50L;
-        OwnershipRenewalTask renewalTask = new OwnershipRenewalTask(ownershipService);
+        this.renewalTask = new OwnershipRenewalTask(ownershipService);
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, renewalTask, renewalTicks, renewalTicks);
     }
 
     @Override
     public void onDisable() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            UUID uuid = player.getUniqueId();
+            PlayerData snapshot = PlayerData.snapshot(player);
+            dataService.saveAndRelease(uuid, snapshot);
+        }
+        ownershipService.releaseAll();
+
         dbManager.close();
     }
 }
