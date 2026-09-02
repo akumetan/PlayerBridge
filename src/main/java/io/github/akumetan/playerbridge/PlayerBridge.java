@@ -39,10 +39,8 @@ public final class PlayerBridge extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Init config
         this.cfgManager = new ConfigManager(this);
 
-        // Init database
         this.dbManager = new DatabaseManager(cfgManager.getConfig().database());
         try {
             this.dbManager.connect();
@@ -54,7 +52,6 @@ public final class PlayerBridge extends JavaPlugin {
             return;
         }
 
-        // Register player profile services
         this.ownershipRepository = new PlayerOwnershipRepository(dbManager);
         this.ownershipService = new PlayerOwnershipService(ownershipRepository, cfgManager.getConfig());
 
@@ -62,17 +59,14 @@ public final class PlayerBridge extends JavaPlugin {
         this.dataService = new PlayerDataService(dataRepository, ownershipService, cfgManager.getConfig());
         this.dataCache = new PlayerDataCache();
 
-        // Register listeners
         this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this, dataService, dataCache, cfgManager.getConfig()), this);
 
-        // Register commands
         this.cmdManager = new CommandManager();
         this.cmdManager.register(new ReloadCommand(cfgManager));
         this.cmdManager.register(new VersionCommand(this, cfgManager.getConfig().messages()));
         this.getCommand("playerbridge").setExecutor(new PlayerBridgeCommand(cmdManager, cfgManager.getConfig().messages()));
         this.getCommand("playerbridge").setTabCompleter(new PlayerBridgeTabCompleter(cmdManager));
 
-        // Start ownership-renewal task
         long renewalTicks = cfgManager.getConfig().ownership().renewalInterval().toMillis() / 50L;
         this.renewalTask = new OwnershipRenewalTask(ownershipService);
         this.getServer().getScheduler().runTaskTimerAsynchronously(this, renewalTask, renewalTicks, renewalTicks);
