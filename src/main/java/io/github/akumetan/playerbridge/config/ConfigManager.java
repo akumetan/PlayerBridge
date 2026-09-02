@@ -25,7 +25,7 @@ public class ConfigManager {
         if (serverId == null || serverId.isBlank()) {
             serverId = UUID.randomUUID().toString();
             yml.set("server-id", serverId);
-            plugin.saveDefaultConfig();
+            plugin.saveConfig();
         }
 
         var database = new DatabaseConfig(
