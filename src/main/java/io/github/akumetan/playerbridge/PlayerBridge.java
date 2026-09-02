@@ -7,6 +7,12 @@ import io.github.akumetan.playerbridge.command.sub.ReloadCommand;
 import io.github.akumetan.playerbridge.command.sub.VersionCommand;
 import io.github.akumetan.playerbridge.config.ConfigManager;
 import io.github.akumetan.playerbridge.database.DatabaseManager;
+import io.github.akumetan.playerbridge.listener.PlayerConnectionListener;
+import io.github.akumetan.playerbridge.profile.data.PlayerDataCache;
+import io.github.akumetan.playerbridge.profile.data.PlayerDataRepository;
+import io.github.akumetan.playerbridge.profile.data.PlayerDataService;
+import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipRepository;
+import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +24,12 @@ public final class PlayerBridge extends JavaPlugin {
     private CommandManager cmdManager;
     private ConfigManager cfgManager;
     private DatabaseManager dbManager;
+    private PlayerOwnershipRepository ownershipRepository;
+    private PlayerOwnershipService ownershipService;
+    private PlayerDataRepository dataRepository;
+    private PlayerDataService dataService;
+    private PlayerDataCache dataCache;
+
 
     @Override
     public void onEnable() {
@@ -35,6 +47,17 @@ public final class PlayerBridge extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        // Register player profile services
+        this.ownershipRepository = new PlayerOwnershipRepository(dbManager);
+        this.ownershipService = new PlayerOwnershipService(ownershipRepository, cfgManager.getConfig());
+
+        this.dataRepository = new PlayerDataRepository(dbManager);
+        this.dataService = new PlayerDataService(dataRepository, ownershipService, cfgManager.getConfig());
+        this.dataCache = new PlayerDataCache();
+
+        // Register listeners
+        this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this, dataService, dataCache, cfgManager.getConfig()), this);
 
         // Register commands
         this.cmdManager = new CommandManager();
