@@ -78,7 +78,7 @@ public final class PlayerOwnershipRepository {
                 if (serverId == null || token == null || until == null)
                     return null;
 
-                return new PlayerOwnership(serverId, token, until.toInstant());
+                return new PlayerOwnership(uuid, serverId, token, until.toInstant());
             }
         }
     }
