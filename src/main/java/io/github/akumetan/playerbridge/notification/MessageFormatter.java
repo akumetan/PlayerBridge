@@ -14,6 +14,10 @@ public class MessageFormatter {
         return PREFIX.append(MINI_MESSAGE.deserialize(rawTemplate, resolvers));
     }
 
+    public static void sendHeader(CommandSender sender, String title) {
+        sender.sendMessage(MINI_MESSAGE.deserialize("<dark_gray>------[</dark_gray><gradient:#00F2FE:#4FACFE>PlayerBridge " + title + "</gradient><dark_gray>]------</dark_gray>"));
+    }
+
     public static void sendFormatted(CommandSender sender, String rawTemplate, TagResolver... resolvers) {
         sender.sendMessage(PREFIX.append(MINI_MESSAGE.deserialize(rawTemplate, resolvers)));
     }

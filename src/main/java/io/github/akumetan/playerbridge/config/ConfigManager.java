@@ -44,7 +44,9 @@ public class ConfigManager {
                 yml.getString("messages.reload-config", "<green>Configuration successfully reloaded.</green>"),
                 yml.getString("messages.check-version", "<gray>You are running version <white><version></white> (<white><server_version></white>).</gray>"),
                 yml.getString("messages.kick-loading-busy", "<red>Your data is currently saving on another server. Please try reconnecting.</red>"),
-                yml.getString("messages.kick-loading-error", "<red>Failed to load your data. Please try again later.</red>")
+                yml.getString("messages.kick-loading-error", "<red>Failed to load your data. Please try again later.</red>"),
+                yml.getString("messages.player-not-exist", "<red>Player <white><player></white> does not exist.</red>"),
+                yml.getString("messages.database-error", "<red>A database error occurred while performing this action.</red>")
         );
 
         var modules = new ModulesConfig(

@@ -5,6 +5,8 @@ public record MessagesConfig(
         String reloadConfig,
         String checkVersion,
         String kickLoadingBusy,
-        String kickLoadingError
+        String kickLoadingError,
+        String playerNotExist,
+        String databaseError
 ) {
 }

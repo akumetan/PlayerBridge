@@ -57,6 +57,10 @@ public final class PlayerOwnershipService {
         }
     }
 
+    public PlayerOwnership find(UUID uuid) throws SQLException {
+        return this.repository.find(uuid);
+    }
+
     public boolean renew(UUID uuid) {
         ReentrantLock local = this.lockLocallyFor(uuid);
         local.lock();
