@@ -36,4 +36,12 @@ public record PlayerData(
                 player.getGameMode(),
                 player.getActivePotionEffects());
     }
+
+    public PlayerData withInventory(byte[] inventory) {
+        return new PlayerData(this.uuid, inventory, this.enderChest, this.health, this.absorption, this.foodLevel, this.saturation, this.experience, this.fireTicks, this.gameMode, this.activeEffects);
+    }
+
+    public PlayerData withEnderChest(byte[] enderChest) {
+        return new PlayerData(this.uuid, this.inventory, enderChest, this.health, this.absorption, this.foodLevel, this.saturation, this.experience, this.fireTicks, this.gameMode, this.activeEffects);
+    }
 }

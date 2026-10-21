@@ -7,6 +7,11 @@ public record MessagesConfig(
         String kickLoadingBusy,
         String kickLoadingError,
         String playerNotExist,
-        String databaseError
+        String databaseError,
+        String playerOnlyCommand,
+        String ownershipLocal,
+        String ownershipGlobal,
+        String ownershipAcquirementFailed,
+        String dataNotFound
 ) {
 }

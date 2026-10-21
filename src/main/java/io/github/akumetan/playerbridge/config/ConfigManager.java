@@ -46,7 +46,13 @@ public class ConfigManager {
                 yml.getString("messages.kick-loading-busy", "<red>Your data is currently saving on another server. Please try reconnecting.</red>"),
                 yml.getString("messages.kick-loading-error", "<red>Failed to load your data. Please try again later.</red>"),
                 yml.getString("messages.player-not-exist", "<red>Player <white><player></white> does not exist.</red>"),
-                yml.getString("messages.database-error", "<red>A database error occurred while performing this action.</red>")
+                yml.getString("messages.database-error", "<red>A database error occurred while performing this action.</red>"),
+                yml.getString("messages.player-only-command", "<red>Only players can use this command.</red>"),
+                yml.getString("messages.ownership-local", "<red>Data for <white><player></white> is currently leased by this server.</red>"),
+                yml.getString("messages.ownership-global", "<red>Data for <white><player></white> is currently leased by another server.</red>"),
+                yml.getString("messages.ownership-acquirement-failed", "<red>Failed to acquire ownership for <white><player></white>.</red>"),
+                yml.getString("messages.data-not-found", "<red>Player <white><player></white> has no stored data yet.</red>")
+
         );
 
         var modules = new ModulesConfig(

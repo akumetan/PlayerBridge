@@ -3,11 +3,14 @@ package io.github.akumetan.playerbridge;
 import io.github.akumetan.playerbridge.command.CommandManager;
 import io.github.akumetan.playerbridge.command.PlayerBridgeCommand;
 import io.github.akumetan.playerbridge.command.PlayerBridgeTabCompleter;
+import io.github.akumetan.playerbridge.command.sub.EditCommand;
 import io.github.akumetan.playerbridge.command.sub.ReloadCommand;
 import io.github.akumetan.playerbridge.command.sub.StatusCommand;
 import io.github.akumetan.playerbridge.command.sub.VersionCommand;
 import io.github.akumetan.playerbridge.config.ConfigManager;
 import io.github.akumetan.playerbridge.database.DatabaseManager;
+import io.github.akumetan.playerbridge.gui.EditorService;
+import io.github.akumetan.playerbridge.listener.EditorInventoryListener;
 import io.github.akumetan.playerbridge.listener.PlayerConnectionListener;
 import io.github.akumetan.playerbridge.profile.data.PlayerData;
 import io.github.akumetan.playerbridge.profile.data.PlayerDataCache;
@@ -69,9 +72,11 @@ public final class PlayerBridge extends JavaPlugin {
         this.uuidCache = new UUIDCache();
         this.fetcher = new Fetcher(this.uuidCache);
 
+        this.getServer().getPluginManager().registerEvents(new EditorInventoryListener(this, dataService), this);
         this.getServer().getPluginManager().registerEvents(new PlayerConnectionListener(this, dataService, dataCache, cfgManager.getConfig()), this);
 
         this.cmdManager = new CommandManager();
+        this.cmdManager.register(new EditCommand(new EditorService(this, this.fetcher, this.ownershipService, this.dataService, this.cfgManager.getConfig()), this.cfgManager.getConfig().messages()));
         this.cmdManager.register(new ReloadCommand(cfgManager));
         this.cmdManager.register(new StatusCommand(this, cfgManager.getConfig().messages(), ownershipService, fetcher));
         this.cmdManager.register(new VersionCommand(this, cfgManager.getConfig().messages()));
