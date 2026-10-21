@@ -8,9 +8,12 @@ import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnership;
 import io.github.akumetan.playerbridge.profile.ownership.PlayerOwnershipService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.util.StringUtil;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed;
@@ -75,7 +78,7 @@ public class StatusCommand implements SubCommand {
                 MessageFormatter.sendHeader(sender, "Status");
                 MessageFormatter.sendFormattedRaw(sender, "<gray>Player<dark_gray>:</dark_gray> <aqua>" + targetName + " <dark_gray>(</dark_gray>" + targetUUID + "<dark_gray>)</dark_gray></aqua></gray>");
 
-                if (ownership == null) {
+                if (ownership == null || Instant.now().isAfter(ownership.expiresAt())) {
                     MessageFormatter.sendFormattedRaw(sender, "<gray>Ownership<dark_gray>:</dark_gray> <green>free</green></gray>");
                     return;
                 }
@@ -91,6 +94,16 @@ public class StatusCommand implements SubCommand {
 
     @Override
     public List<String> getTabSuggestions(CommandSender sender, String[] args) {
-        return List.of();
+        List<String> completions = new ArrayList<>();
+
+        if (args.length == 1) {
+            List<String> suggestions = new ArrayList<>();
+            Bukkit.getOnlinePlayers().forEach(player -> suggestions.add(player.getName()));
+
+            StringUtil.copyPartialMatches(args[0], suggestions, completions);
+            Collections.sort(completions);
+        }
+
+        return completions;
     }
 }
