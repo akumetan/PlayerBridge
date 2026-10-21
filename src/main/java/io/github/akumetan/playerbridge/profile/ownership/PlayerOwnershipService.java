@@ -57,8 +57,12 @@ public final class PlayerOwnershipService {
         }
     }
 
-    public PlayerOwnership find(UUID uuid) throws SQLException {
-        return this.repository.find(uuid);
+    public PlayerOwnership find(UUID uuid) {
+        try {
+            return this.repository.find(uuid);
+        } catch (SQLException exception) {
+            return null;
+        }
     }
 
     public boolean renew(UUID uuid) {
